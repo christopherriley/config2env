@@ -26,10 +26,11 @@ const inputJsonNested string = `
 }
 `
 
-func TestGenerate(t *testing.T) {
+func TestGenerateJson(t *testing.T) {
 
 	t.Run("simple json", func(t *testing.T) {
-		actual := Generate(inputJsonSimple)
+		actual, err := GenerateJson(inputJsonSimple)
+		require.NoError(t, err)
 
 		require.Len(t, actual, 3)
 
@@ -39,7 +40,8 @@ func TestGenerate(t *testing.T) {
 	})
 
 	t.Run("nested json", func(t *testing.T) {
-		actual := Generate(inputJsonNested)
+		actual, err := GenerateJson(inputJsonNested)
+		require.NoError(t, err)
 
 		require.Len(t, actual, 3)
 

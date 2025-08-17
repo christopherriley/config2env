@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func generate(inputMap map[string]any, envMap map[string]string, prefix string) {
+func generateJson(inputMap map[string]any, envMap map[string]string, prefix string) {
 	prefix = strings.TrimSpace(prefix)
 	if len(prefix) > 0 {
 		prefix = fmt.Sprintf("%s_", prefix)
@@ -27,7 +27,7 @@ func generate(inputMap map[string]any, envMap map[string]string, prefix string) 
 				envMap[name] = strconv.FormatFloat(v, 'f', -1, 64)
 			}
 		case map[string]any:
-			generate(v, envMap, name)
+			generateJson(v, envMap, name)
 		case []any:
 			panic(fmt.Sprintf("key '%s': arrays are not supported", name))
 		default:
@@ -36,15 +36,15 @@ func generate(inputMap map[string]any, envMap map[string]string, prefix string) 
 	}
 }
 
-func Generate(rawJson string) map[string]string {
+func GenerateJson(rawJson string) (map[string]string, error) {
 	envMap := make(map[string]string)
 
 	var rawJsonMap map[string]any
 	if err := json.Unmarshal([]byte(rawJson), &rawJsonMap); err != nil {
-		panic(fmt.Sprintf("failed to unmarshal input json: %s", err))
+		return nil, fmt.Errorf("failed to unmarshal input json: %s", err)
 	}
 
-	generate(rawJsonMap, envMap, "")
+	generateJson(rawJsonMap, envMap, "")
 
-	return envMap
+	return envMap, nil
 }
