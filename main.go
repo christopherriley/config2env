@@ -23,7 +23,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "reading input from file '%s'\n\n", *flagInputFile)
 		rawBytes, err := os.ReadFile(*flagInputFile)
 		if err != nil {
-			fmt.Printf("failed to read input json file: %s\n", err)
+			fmt.Printf("failed to read input file: %s\n", err)
 			os.Exit(1)
 		}
 
