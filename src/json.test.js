@@ -60,9 +60,9 @@ describe('json with array', () => {
     const input = `
         {
             "something": {
-            "a": [1,2,3]
+                "a": [1,2,3]
+            }
         }
-    }
 `;
 
     test('should throw unsupported content error', () => {
