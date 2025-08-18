@@ -1,3 +1,6 @@
+const InvalidContentError = require('./errors');
+const UnsupportedContentError = require('./errors');
+
 function generateJson(inputObj, prefix) {
     let envMap = new Map();
 
@@ -11,7 +14,7 @@ function generateJson(inputObj, prefix) {
         const name = prefix + k;
 
         if (v instanceof Array) {
-            throw new Error('key \'' + name + '\': arrays are not supported')
+            throw new UnsupportedContentError('key \'' + name + '\': arrays are not supported')
         } else if (typeof v == "string") {
             envMap.set(name,  v);
         } else if (typeof v == "number") {
@@ -25,10 +28,22 @@ function generateJson(inputObj, prefix) {
 }
 
 function GenerateJson(rawJson)  {
+    let rawJsonObject = Object;
+
     try {
-	    return generateJson(JSON.parse(rawJson), "");
+        try {
+            rawJsonObject = JSON.parse(rawJson);
+        } catch(error) {
+            throw new InvalidContentError('failed to parse JSON: ' + error);
+        }
+
+        return generateJson(rawJsonObject, "");
     } catch (error) {
-        throw new Error('failed to parse JSON: ' + error);
+        if (!error instanceof InvalidContentError) {
+            throw new Error('error processing JSON content: ' + error);
+        }
+
+        throw error;
     }
 }
 

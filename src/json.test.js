@@ -1,3 +1,5 @@
+const InvalidContentError = require('./errors');
+const UnsupportedContentError = require('./errors');
 const GenerateJson = require('./json');
 
 const inputJsonSimple = `
@@ -16,6 +18,18 @@ const inputJsonNested = `
 		"macos": 1.23
 	}
 }
+`;
+
+const inputJsonArray = `
+{
+	"something": {
+		"a": [1,2,3]
+	}
+}
+`;
+
+const inputPlainText = `
+this is just some plain unstructured text.
 `;
 
 describe('basic json', () => {
@@ -49,8 +63,20 @@ describe('nested json', () => {
         check(m, 'version_linux', '1.22');
     });
 
-    test('windows version', () => {
+    test('macos version', () => {
         check(m, 'version_macos', '1.23');
+    });
+});
+
+describe('json with array', () => {
+    test('should throw unsupported content error', () => {
+        expect(() => GenerateJson(inputJsonArray)).toThrow(UnsupportedContentError);
+    });
+});
+
+describe('plain text', () => {
+    test('should throw invalid content error', () => {
+        expect(() => GenerateJson(inputPlainText)).toThrow(InvalidContentError);
     });
 });
 
