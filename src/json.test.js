@@ -2,38 +2,16 @@ const InvalidContentError = require('./errors');
 const UnsupportedContentError = require('./errors');
 const GenerateJson = require('./json');
 
-const inputJsonSimple = `
-{
-	"name": "chris",
-	"age": 27,
-	"gpa": 3.84
-}
-`;
-
-const inputJsonNested = `
-{
-	"version": {
-		"windows": 1.21,
-		"linux": 1.22,
-		"macos": 1.23
-	}
-}
-`;
-
-const inputJsonArray = `
-{
-	"something": {
-		"a": [1,2,3]
-	}
-}
-`;
-
-const inputPlainText = `
-this is just some plain unstructured text.
-`;
 
 describe('basic json', () => {
-    const m = GenerateJson(inputJsonSimple);
+    const input = `
+        {
+            "name": "chris",
+            "age": 27,
+            "gpa": 3.84
+        }
+`;
+    const m = GenerateJson(input);
 
     expect(m.size).toBe(3);
 
@@ -51,7 +29,17 @@ describe('basic json', () => {
 });
 
 describe('nested json', () => {
-    const m = GenerateJson(inputJsonNested);
+    const input = `
+        {
+            "version": {
+                "windows": 1.21,
+                "linux": 1.22,
+                "macos": 1.23
+            }
+        }
+`;
+
+    const m = GenerateJson(input);
 
     expect(m.size).toBe(3);
 
@@ -69,14 +57,24 @@ describe('nested json', () => {
 });
 
 describe('json with array', () => {
+    const input = `
+        {
+            "something": {
+            "a": [1,2,3]
+        }
+    }
+`;
+
     test('should throw unsupported content error', () => {
-        expect(() => GenerateJson(inputJsonArray)).toThrow(UnsupportedContentError);
+        expect(() => GenerateJson(input)).toThrow(UnsupportedContentError);
     });
 });
 
 describe('plain text', () => {
+    const input = `this is just some plain unstructured text.`;
+
     test('should throw invalid content error', () => {
-        expect(() => GenerateJson(inputPlainText)).toThrow(InvalidContentError);
+        expect(() => GenerateJson(input)).toThrow(InvalidContentError);
     });
 });
 
