@@ -4,7 +4,7 @@
   "description": "",
   "main": "action.js",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node src/cli.js",
     "test": "vitest run"
   },
   "repository": {
