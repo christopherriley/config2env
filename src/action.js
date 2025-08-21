@@ -2,6 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import * as core from "@actions/core";
 import { GenerateFromFile } from './generate.js';
+import { AppError } from './errors.js';
 
 try {
     const GITHUB_ENV = process.env.GITHUB_ENV.trim();
@@ -13,11 +14,16 @@ try {
 
     const configFile = core.getInput("config-file").trim();
     if (configFile.length == 0) {
-        throw new Error(`config-file input variable is not set`);
+        throw new AppError(`config-file input variable is not set`);
     }
     core.info(`config file: ${configFile}`);
 
-    const envMap = GenerateFromFile(configFile);
+    const prefix = core.getInput("prefix").trim();
+    if (prefix.length > 0) {
+        core.info(`env var prefix: ${prefix}`);
+    }
+
+    const envMap = GenerateFromFile(configFile, prefix);
     envMap.forEach((v, k) => {
         core.info(`${k}="${v}"`);
 
@@ -25,10 +31,14 @@ try {
             try {
                 fs.appendFileSync(GITHUB_ENV, `${k}=${v}` + os.EOL, 'utf8');
             } catch (err) {
-                throw new Error(`failed to write to GITHUB_ENV: ${err}`);
+                throw new AppError(`failed to write to GITHUB_ENV: ${err}`);
             }
         }
     });
-} catch (error) {
-    core.setFailed(error.message);
+} catch (err) {
+    if (err instanceof AppError) {
+        core.setFailed(err.message);
+    } else {
+        core.setFailed(err);
+    }
 }

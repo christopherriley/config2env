@@ -27246,14 +27246,21 @@ function requireCore () {
 
 var coreExports = requireCore();
 
-class InvalidContentError extends Error {
+class AppError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "AppError";
+    }
+}
+
+class InvalidContentError extends AppError {
     constructor(message) {
         super('invalid content: ' + message);
         this.name = "InvalidContentError";
     }
 }
 
-class UnsupportedContentError extends Error {
+class UnsupportedContentError extends AppError {
     constructor(message) {
         super('unsupported content: ' + message);
         this.name = "UnsupportedContentError";
@@ -27286,7 +27293,7 @@ function generateJson(inputObj, prefix) {
     return envMap;
 }
 
-function GenerateJson(rawJson)  {
+function GenerateJson(rawJson, prefix)  {
     let rawJsonObject = Object;
 
     try {
@@ -27295,31 +27302,31 @@ function GenerateJson(rawJson)  {
         throw new InvalidContentError('failed to parse JSON: ' + error);
     }
 
-    return generateJson(rawJsonObject, "");
+    return generateJson(rawJsonObject, prefix);
 }
 
-function GenerateFromFile(f) {
+function GenerateFromFile(f, prefix) {
     let fileContent = '';
 
     try {
         fileContent = require$$1.readFileSync(f, 'utf8');
     } catch (err) {
-        throw new Error(`failed to read config file '${f}': ${err}`);
+        throw new AppError(`failed to read config file '${f}': ${err}`);
     }
 
-    return GenerateFromContent(fileContent);
+    return GenerateFromContent(fileContent, prefix);
 }
 
-function GenerateFromContent(c) {
+function GenerateFromContent(c, prefix) {
     try {
-        return GenerateJson(c);
+        return GenerateJson(c, prefix);
     } catch (err) {
         if (!(err instanceof InvalidContentError)) {
-            throw new Error(`failed to process JSON content: ${err}`);
+            throw new AppError(`failed to process JSON content: ${err}`);
         }
     }
 
-    throw new Error('content could not be processed with any known method');
+    throw new AppError('content could not be processed with any known method');
 }
 
 try {
@@ -27332,11 +27339,16 @@ try {
 
     const configFile = coreExports.getInput("config-file").trim();
     if (configFile.length == 0) {
-        throw new Error(`config-file input variable is not set`);
+        throw new AppError(`config-file input variable is not set`);
     }
     coreExports.info(`config file: ${configFile}`);
 
-    const envMap = GenerateFromFile(configFile);
+    const prefix = coreExports.getInput("prefix").trim();
+    if (prefix.length > 0) {
+        coreExports.info(`env var prefix: ${prefix}`);
+    }
+
+    const envMap = GenerateFromFile(configFile, prefix);
     envMap.forEach((v, k) => {
         coreExports.info(`${k}="${v}"`);
 
@@ -27344,11 +27356,15 @@ try {
             try {
                 require$$1.appendFileSync(GITHUB_ENV, `${k}=${v}` + require$$0.EOL, 'utf8');
             } catch (err) {
-                throw new Error(`failed to write to GITHUB_ENV: ${err}`);
+                throw new AppError(`failed to write to GITHUB_ENV: ${err}`);
             }
         }
     });
-} catch (error) {
-    coreExports.setFailed(error.message);
+} catch (err) {
+    if (err instanceof AppError) {
+        coreExports.setFailed(err.message);
+    } else {
+        coreExports.setFailed(err);
+    }
 }
 //# sourceMappingURL=action.js.map

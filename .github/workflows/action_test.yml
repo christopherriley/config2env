@@ -16,24 +16,25 @@ jobs:
         uses: christopherriley/config2env@main
         with:
           config-file: ./test/json/simple.json
+          prefix: action_test
 
       - name: check results
         run: |
-          echo name: $name
-          echo age: $age
-          echo gpa: $gpa
+          echo action_test_name: $action_test_name
+          echo action_test_age: $action_test_age
+          echo action_test_gpa: $action_test_gpa
 
-          if [ ! "$name" == "bob smith" ]; then
-            echo "test failed: env var 'name' - expected 'bob smith' got '$name'"
+          if [ ! "$action_test_name" == "bob smith" ]; then
+            echo "test failed: env var 'action_test_name' - expected 'bob smith' got '$action_test_name'"
             exit 1
           fi
 
-          if [ ! "$age" == "27" ]; then
-            echo "test failed: env var 'age' - expected '27' got '$age'"
+          if [ ! "$action_test_age" == "27" ]; then
+            echo "test failed: env var 'action_test_age' - expected '27' got '$action_test_age'"
             exit 1
           fi
 
-          if [ ! "$gpa" == "3.84" ]; then
-            echo "test failed: env var 'gpa' - expected '3.84' got '$gpa'"
+          if [ ! "$action_test_gpa" == "3.84" ]; then
+            echo "test failed: env var 'action_test_gpa' - expected '3.84' got '$action_test_gpa'"
             exit 1
           fi

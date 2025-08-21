@@ -1,27 +1,27 @@
 import fs from 'fs';
 import GenerateJson from './json.js';
-import { InvalidContentError } from './errors.js';
+import { AppError, InvalidContentError } from './errors.js';
 
-export function GenerateFromFile(f) {
+export function GenerateFromFile(f, prefix) {
     let fileContent = '';
 
     try {
         fileContent = fs.readFileSync(f, 'utf8');
     } catch (err) {
-        throw new Error(`failed to read config file '${f}': ${err}`);
+        throw new AppError(`failed to read config file '${f}': ${err}`);
     }
 
-    return GenerateFromContent(fileContent);
+    return GenerateFromContent(fileContent, prefix);
 }
 
-function GenerateFromContent(c) {
+function GenerateFromContent(c, prefix) {
     try {
-        return GenerateJson(c);
+        return GenerateJson(c, prefix);
     } catch (err) {
         if (!(err instanceof InvalidContentError)) {
-            throw new Error(`failed to process JSON content: ${err}`);
+            throw new AppError(`failed to process JSON content: ${err}`);
         }
     }
 
-    throw new Error('content could not be processed with any known method');
+    throw new AppError('content could not be processed with any known method');
 }

@@ -5,6 +5,9 @@ inputs:
   config-file:
     description: Config file to convert to environment variables
     required: true
+  prefix:
+    description: Prefix to attach to generated env vars
+    required: false
 
 runs:
   using: node20

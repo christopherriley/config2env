@@ -26,7 +26,7 @@ function generateJson(inputObj, prefix) {
     return envMap;
 }
 
-export default function GenerateJson(rawJson)  {
+export default function GenerateJson(rawJson, prefix)  {
     let rawJsonObject = Object;
 
     try {
@@ -35,5 +35,5 @@ export default function GenerateJson(rawJson)  {
         throw new InvalidContentError('failed to parse JSON: ' + error);
     }
 
-    return generateJson(rawJsonObject, "");
+    return generateJson(rawJsonObject, prefix);
 }
