@@ -12,20 +12,20 @@ describe('basic json', () => {
             "gpa": 3.84
         }
 `;
-    const m = GenerateJson(input);
+    const m = GenerateJson(input, "test_prefix");
 
     expect(m.size).toBe(3);
 
     test('name', () => {
-        check(m, 'name', 'chris');
+        check(m, 'test_prefix_name', 'chris');
     });
 
     test('age', () => {
-        check(m, 'age', '27');
+        check(m, 'test_prefix_age', '27');
     });
 
     test('gpa', () => {
-        check(m, 'gpa', '3.84');
+        check(m, 'test_prefix_gpa', '3.84');
     });
 });
 
@@ -80,6 +80,6 @@ describe('plain text', () => {
 });
 
 function check(m, k, v) {
-    expect(m.has(k)).toBe(true);
-    expect(m.get(k)).toBe(v);
+    expect(m.has(k), `key '${k}' is not in the map`).toBe(true);
+    expect(m.get(k), `key: ${k}`).toBe(v);
 }

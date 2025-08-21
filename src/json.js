@@ -26,7 +26,7 @@ function generateJson(inputObj, prefix) {
     return envMap;
 }
 
-export default function GenerateJson(rawJson, prefix)  {
+export default function GenerateJson(rawJson, prefix = '')  {
     let rawJsonObject = Object;
 
     try {

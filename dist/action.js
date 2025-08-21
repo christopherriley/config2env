@@ -27293,7 +27293,7 @@ function generateJson(inputObj, prefix) {
     return envMap;
 }
 
-function GenerateJson(rawJson, prefix)  {
+function GenerateJson(rawJson, prefix = '')  {
     let rawJsonObject = Object;
 
     try {
