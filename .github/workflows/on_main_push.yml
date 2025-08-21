@@ -8,3 +8,6 @@ on:
 jobs:
   unit-tests:
     uses: ./.github/workflows/unittest.yml
+
+  action-test:
+    uses: ./.github/workflows/action_test.yml
