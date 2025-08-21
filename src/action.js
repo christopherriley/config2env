@@ -22,7 +22,7 @@ try {
 
         if (GITHUB_ENV.length > 0) {
             try {
-                fs.appendFile(GITHUB_ENV, `${k}="${v}"`);
+                fs.appendFileSync(GITHUB_ENV, `${k}="${v}"`, 'utf8');
             } catch (err) {
                 throw new Error(`failed to write to GITHUB_ENV: ${err}`);
             }
