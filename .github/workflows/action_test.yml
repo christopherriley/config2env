@@ -19,7 +19,7 @@ jobs:
 
       - name: check results
         run: |
-          if [ ! "$name" == "chris" ]; then
-            echo "test failed: env var 'name' - expected 'chris' got '$name'"
+          if [ ! "$name" == "bob smith" ]; then
+            echo "test failed: env var 'name' - expected 'bob smith' got '$name'"
             exit 1
           fi
