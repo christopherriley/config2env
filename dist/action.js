@@ -27246,6 +27246,82 @@ function requireCore () {
 
 var coreExports = requireCore();
 
+class InvalidContentError extends Error {
+    constructor(message) {
+        super('invalid content: ' + message);
+        this.name = "InvalidContentError";
+    }
+}
+
+class UnsupportedContentError extends Error {
+    constructor(message) {
+        super('unsupported content: ' + message);
+        this.name = "UnsupportedContentError";
+    }
+}
+
+function generateJson(inputObj, prefix) {
+    let envMap = new Map();
+
+	if (prefix.length > 0) {
+		prefix = prefix + "_";
+	}
+
+    const m = new Map(Object.entries(inputObj));
+
+    for (const [k, v] of m) {
+        const name = prefix + k;
+
+        if (v instanceof Array) {
+            throw new UnsupportedContentError('key \'' + name + '\': arrays are not supported')
+        } else if (typeof v == "string") {
+            envMap.set(name,  v);
+        } else if (typeof v == "number") {
+            envMap.set(name,  "" + v);
+        } else if (typeof v == "object") {
+            envMap = new Map([...envMap, ...generateJson(v, name)]);
+        }
+    }
+
+    return envMap;
+}
+
+function GenerateJson(rawJson)  {
+    let rawJsonObject = Object;
+
+    try {
+        rawJsonObject = JSON.parse(rawJson);
+    } catch(error) {
+        throw new InvalidContentError('failed to parse JSON: ' + error);
+    }
+
+    return generateJson(rawJsonObject, "");
+}
+
+function GenerateFromFile(f) {
+    let fileContent = '';
+
+    try {
+        fileContent = require$$1.readFileSync(f, 'utf8');
+    } catch (err) {
+        throw new Error(`failed to read config file '${f}': ${err}`);
+    }
+
+    return GenerateFromContent(fileContent);
+}
+
+function GenerateFromContent(c) {
+    try {
+        return GenerateJson(c);
+    } catch (err) {
+        if (!(err instanceof InvalidContentError)) {
+            throw new Error(`failed to process JSON content: ${err}`);
+        }
+    }
+
+    throw new Error('content could not be processed with any known method');
+}
+
 try {
     const GITHUB_ENV = process.env.GITHUB_ENV.trim();
     if (GITHUB_ENV.length == 0) {

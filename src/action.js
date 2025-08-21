@@ -1,6 +1,6 @@
 import fs from 'fs';
-
 import * as core from "@actions/core";
+import { GenerateFromFile } from './generate.js';
 
 try {
     const GITHUB_ENV = process.env.GITHUB_ENV.trim();
