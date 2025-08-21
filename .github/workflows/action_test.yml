@@ -31,7 +31,7 @@ jobs:
             exit 1
           fi
 
-          echo age: $gpa
+          echo gpa: $gpa
           if [ ! "$gpa" == "3.84" ]; then
             echo "test failed: env var 'gpa' - expected '3.84' got '$gpa'"
             exit 1
