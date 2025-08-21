@@ -1,4 +1,4 @@
-name: runs on PRs
+name: PR checks
 
 on:
   pull_request:
