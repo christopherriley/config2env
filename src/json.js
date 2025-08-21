@@ -1,5 +1,4 @@
-const InvalidContentError = require('./errors');
-const UnsupportedContentError = require('./errors');
+import { InvalidContentError, UnsupportedContentError } from './errors.js';
 
 function generateJson(inputObj, prefix) {
     let envMap = new Map();
@@ -27,24 +26,14 @@ function generateJson(inputObj, prefix) {
     return envMap;
 }
 
-function GenerateJson(rawJson)  {
+export default function GenerateJson(rawJson)  {
     let rawJsonObject = Object;
 
     try {
-        try {
-            rawJsonObject = JSON.parse(rawJson);
-        } catch(error) {
-            throw new InvalidContentError('failed to parse JSON: ' + error);
-        }
-
-        return generateJson(rawJsonObject, "");
-    } catch (error) {
-        if (!error instanceof InvalidContentError) {
-            throw new Error('error processing JSON content: ' + error);
-        }
-
-        throw error;
+        rawJsonObject = JSON.parse(rawJson);
+    } catch(error) {
+        throw new InvalidContentError('failed to parse JSON: ' + error);
     }
-}
 
-module.exports = GenerateJson;
+    return generateJson(rawJsonObject, "");
+}

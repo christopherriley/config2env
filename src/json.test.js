@@ -1,6 +1,7 @@
-const InvalidContentError = require('./errors');
-const UnsupportedContentError = require('./errors');
-const GenerateJson = require('./json');
+import { describe, expect, test } from "vitest";
+import InvalidContentError from './errors.js';
+import UnsupportedContentError from './errors.js';
+import GenerateJson from './json.js';
 
 
 describe('basic json', () => {
