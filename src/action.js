@@ -1,4 +1,5 @@
 import fs from 'fs';
+import os from 'os';
 import * as core from "@actions/core";
 import { GenerateFromFile } from './generate.js';
 
@@ -22,7 +23,7 @@ try {
 
         if (GITHUB_ENV.length > 0) {
             try {
-                fs.appendFileSync(GITHUB_ENV, `${k}="${v}"`, 'utf8');
+                fs.appendFileSync(GITHUB_ENV, `${k}="${v}"` + os.EOL, 'utf8');
             } catch (err) {
                 throw new Error(`failed to write to GITHUB_ENV: ${err}`);
             }

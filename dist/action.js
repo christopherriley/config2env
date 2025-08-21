@@ -27342,7 +27342,7 @@ try {
 
         if (GITHUB_ENV.length > 0) {
             try {
-                require$$1.appendFileSync(GITHUB_ENV, `${k}="${v}"`, 'utf8');
+                require$$1.appendFileSync(GITHUB_ENV, `${k}="${v}"` + require$$0.EOL, 'utf8');
             } catch (err) {
                 throw new Error(`failed to write to GITHUB_ENV: ${err}`);
             }
