@@ -22,4 +22,4 @@ jobs:
         run: npm install
 
       - name: Unit tests
-        run: NO_COLOR=true npm test
+        run: npm test
