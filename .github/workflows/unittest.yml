@@ -1,11 +1,11 @@
-name: Linux tests
+name: unit tests
 
 on:
   workflow_dispatch:
   workflow_call:
 
 jobs:
-  unittest:
+  unittest-linux:
     runs-on: ubuntu-latest
 
     steps:
