@@ -1,0 +1,11 @@
+name: Config2env
+description: Convert a config file to environment variables
+
+inputs:
+  config-file:
+    description: Config file to convert to environment variables
+    required: true
+
+runs:
+  using: node20
+  main: dist/action.js
