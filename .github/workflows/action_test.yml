@@ -18,7 +18,7 @@ jobs:
           config-file: ./test/json/simple.json
           prefix: action_test
 
-      - name: check results
+      - name: verify the env vars are properly set
         run: |
           echo action_test_name: $action_test_name
           echo action_test_age: $action_test_age
