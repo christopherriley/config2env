@@ -10,7 +10,7 @@ if (import.meta.url.startsWith('file:')) {
                 console.log(`${k}=${v}`)
             });
         } catch (err) {
-            console.error(err);
+            console.error(err.message);
             process.exit(1);
         }
     }
