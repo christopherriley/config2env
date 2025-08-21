@@ -19,7 +19,20 @@ jobs:
 
       - name: check results
         run: |
+          echo name: $name
           if [ ! "$name" == "bob smith" ]; then
             echo "test failed: env var 'name' - expected 'bob smith' got '$name'"
+            exit 1
+          fi
+
+          echo age: $age
+          if [ ! "$age" == "27" ]; then
+            echo "test failed: env var 'age' - expected '27' got '$age'"
+            exit 1
+          fi
+
+          echo age: $gpa
+          if [ ! "$gpa" == "3.84" ]; then
+            echo "test failed: env var 'gpa' - expected '3.84' got '$gpa'"
             exit 1
           fi
