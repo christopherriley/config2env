@@ -1,4 +1,4 @@
-name: main branch
+name: runs on the latest main when new commits are pushed
 
 on:
   push:
