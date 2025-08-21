@@ -1,0 +1,25 @@
+name: test the github action (latest main)
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  linux-test:
+    name: simple json - linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: run action with test config
+        uses: christopherriley/config2env@main
+        with:
+          config-file: ./test/json/simple.json
+
+      - name: check results
+        run: |
+          if [ ! "$name" == "chris" ]; then
+            echo "test failed: env var 'name' - expected 'chris' got '$name'"
+            exit 1
+          fi
