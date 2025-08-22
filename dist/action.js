@@ -32800,7 +32800,7 @@ function _visit(path, item, visitor) {
 }
 
 /** The byte order mark */
-const BOM = '\u{FEFF}';
+const BOM$1 = '\u{FEFF}';
 /** Start of doc-mode */
 const DOCUMENT = '\x02'; // C0: Start of Text
 /** Unexpected end of flow-mode */
@@ -32819,7 +32819,7 @@ const isScalar = (token) => !!token &&
 /** Get a printable representation of a lexer token */
 function prettyToken(token) {
     switch (token) {
-        case BOM:
+        case BOM$1:
             return '<BOM>';
         case DOCUMENT:
             return '<DOC>';
@@ -32834,7 +32834,7 @@ function prettyToken(token) {
 /** Identify the type of a lexer token. May return `null` for unknown tokens. */
 function tokenType(source) {
     switch (source) {
-        case BOM:
+        case BOM$1:
             return 'byte-order-mark';
         case DOCUMENT:
             return 'doc-mode';
@@ -32894,7 +32894,7 @@ function tokenType(source) {
 
 var cst = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	BOM: BOM,
+	BOM: BOM$1,
 	DOCUMENT: DOCUMENT,
 	FLOW_END: FLOW_END,
 	SCALAR: SCALAR,
@@ -33153,7 +33153,7 @@ class Lexer {
         let line = this.getLine();
         if (line === null)
             return this.setNext('stream');
-        if (line[0] === BOM) {
+        if (line[0] === BOM$1) {
             yield* this.pushCount(1);
             line = line.substring(1);
         }
@@ -34796,6 +34796,62 @@ function GenerateYaml(rawYaml, prefix = '')  {
     return generateYaml(rawYamlObject, prefix);
 }
 
+var unescapeContent=function(r){return r.replace(/\\[^u]|\\u.{4}/g,function(r){var e=r.charAt(1);switch(e){case "f":return "\f";case "n":return "\n";case "r":return "\r";case "t":return "\t";case "u":var t=r.slice(2,6);if(!/[\da-f]{4}/i.test(t))throw new Error("malformed escaped unicode characters '\\u".concat(t,"'"));return String.fromCodePoint(Number.parseInt(t,16));default:return e}})};
+
+var __values$1=undefined&&undefined.__values||function(t){var e="function"==typeof Symbol&&Symbol.iterator,i=e&&t[e],s=0;if(i)return i.call(t);if(t&&"number"==typeof t.length)return {next:function(){return t&&s>=t.length&&(t=void 0),{value:t&&t[s++],done:!t}}};throw new TypeError(e?"Object is not iterable.":"Symbol.iterator is not defined.")};var Property=function(){function t(t,e,i){this.key="",this.escapedKey="",this.hasNoKey=false,this.hasMultilineKey=false,this.keyCollisionLines=[],this.hasKeyCollisions=false,this.value="",this.escapedValue="",this.newlinePositions=[],this.linesContent=t.content,this.startingLineNumber=e,this.endingLineNumber=e,this.previousProperty=i,null==i||i.setNextProperty(this);}return t.prototype.setNextProperty=function(t){this.nextProperty=t;},t.prototype.addLine=function(t){this.linesContent.length>0&&(this.newlinePositions.push(this.linesContent.length),this.endingLineNumber++),this.linesContent+=t.content;},t.prototype.setKeyAndValue=function(){this.findSeparator(),void 0!==this.separatorPosition&&void 0!==this.separatorLength?(this.hasNoKey||(this.escapedKey=this.linesContent.slice(0,this.separatorPosition),this.key=this.unescapeLine(this.escapedKey,this.startingLineNumber)),this.escapedValue=this.linesContent.slice(this.separatorPosition+this.separatorLength),this.value=this.unescapeLine(this.escapedValue,this.startingLineNumber)):(this.escapedKey=this.linesContent,this.key=this.unescapeLine(this.escapedKey,this.startingLineNumber));},t.prototype.unescapeLine=function(t,e){try{return unescapeContent(t)}catch(t){throw new Error("".concat(t.message," in property starting at line ").concat(e))}},t.prototype.findSeparator=function(){var t,e;if(!this.hasNoKey&&!this.separator){try{for(var i=__values$1(this.linesContent.matchAll(/[\t\f :=]/g)),s=i.next();!s.done;s=i.next()){var n=s.value.index,o=this.linesContent.slice(0,n).match(/(\\+)$/);if(o)if(!!(o[1].length%2))continue;var r="";this.separatorPosition=n;var a=this.linesContent.slice(n),h=(a.match(/^([\t\n\v\f\r ]+)/)||[""])[0];h.length>0&&(r+=h,a=a.slice(h.length)),/[:=]/.test(a[0])&&(r+=a[0],r+=((a=a.slice(1)).match(/^([\t\n\v\f\r ]+)/)||[""])[0]),this.separatorLength=r.length,this.valuePosition=this.separatorPosition+this.separatorLength,this.separator=this.linesContent.slice(this.separatorPosition,this.separatorPosition+this.separatorLength),n||(this.hasNoKey=!0);break}}catch(e){t={error:e};}finally{try{s&&!s.done&&(e=i.return)&&e.call(i);}finally{if(t)throw t.error}} void 0!==this.separatorPosition&&this.newlinePositions.length>0&&this.newlinePositions[0]<this.separatorPosition&&(this.hasMultilineKey=true);}},t}();
+
+var PropertyLine=function(t,i){if(this.isContinuing=false,this.isBlank=false,this.isComment=false,this.content=t.trimStart(),this.isMultiline=i,0===this.content.length)this.isBlank=true;else if(this.isMultiline||(this.isComment=!!/^[!#]/.test(this.content)),!this.isComment){var n=this.content.match(/(\\+)$/);n&&(this.isContinuing=!!(n[1].length%2),this.isContinuing&&(this.content=this.content.slice(0,-1)));}};
+
+var __values=undefined&&undefined.__values||function(e){var t="function"==typeof Symbol&&Symbol.iterator,r=t&&e[t],n=0;if(r)return r.call(e);if(e&&"number"==typeof e.length)return {next:function(){return e&&n>=e.length&&(e=void 0),{value:e&&e[n++],done:!e}}};throw new TypeError(t?"Object is not iterable.":"Symbol.iterator is not defined.")},__read=undefined&&undefined.__read||function(e,t){var r="function"==typeof Symbol&&e[Symbol.iterator];if(!r)return e;var n,i,o=r.call(e),s=[];try{for(;(void 0===t||t-- >0)&&!(n=o.next()).done;)s.push(n.value);}catch(e){i={error:e};}finally{try{n&&!n.done&&(r=o.return)&&r.call(o);}finally{if(i)throw i.error}}return s};var BOM="\ufeff";var BOM_CODE_POINT=BOM.codePointAt(0);var DEFAULT_END_OF_LINE_CHARACTER="\n";var getFirstEolCharacter=function(e){var t=e.indexOf("\n");return  -1===t?void 0:"".concat("\r"===e[t-1]?"\r":"","\n")};var Properties=function(){function e(e){var t;this.collection=[],this.keyLineNumbers={};var r="string"==typeof e?e:e.toString();this.hasBom=r.codePointAt(0)===BOM_CODE_POINT,this.eolCharacter=null!==(t=getFirstEolCharacter(r))&&void 0!==t?t:DEFAULT_END_OF_LINE_CHARACTER,this.lines=(this.hasBom?r.slice(1):r).split(/\r?\n/),this.parseLines();}return e.prototype.parseLines=function(){var e,t;this.collection=[],this.keyLineNumbers={};var r,n,i=0;try{for(var o=__values(this.lines),s=o.next();!s.done;s=o.next()){var l=s.value;i++;var a=new PropertyLine(l,!!r);if(r){if(r.addLine(a),a.isContinuing)continue}else {if(a.isComment||a.isBlank)continue;if(r=new Property(a,i,n),a.isContinuing)continue}this.addToCollection(r),n=r,r=void 0;}}catch(t){e={error:t};}finally{try{s&&!s.done&&(t=o.return)&&t.call(o);}finally{if(e)throw e.error}}},e.prototype.addToCollection=function(e){var t;e.setKeyAndValue(),(null===(t=this.keyLineNumbers[e.key])||void 0===t?void 0:t.length)?(this.keyLineNumbers[e.key].push(e.startingLineNumber),e.hasKeyCollisions=true,e.keyCollisionLines=this.keyLineNumbers[e.key],this.collection=this.collection.filter(function(t){return t.key!==e.key})):this.keyLineNumbers[e.key]=[e.startingLineNumber],this.collection.push(e);},e.prototype.getKeyCollisions=function(){var e,t,r=[];try{for(var n=__values(Object.entries(this.keyLineNumbers)),i=n.next();!i.done;i=n.next()){var o=__read(i.value,2),s=o[0],l=o[1];l.length>1&&r.push(new KeyCollisions(s,l));}}catch(t){e={error:t};}finally{try{i&&!i.done&&(t=n.return)&&t.call(n);}finally{if(e)throw e.error}}return r},e.prototype.toObject=function(){var e={};return this.collection.forEach(function(t){e[t.key]=t.value;}),e},e.prototype.format=function(e){return "".concat(this.hasBom?BOM:"").concat(this.lines.join(e||this.eolCharacter))},e}();var KeyCollisions=function(){function e(e,t){this.key=e,this.startingLineNumbers=t;}return e.prototype.getApplicableLineNumber=function(){return this.startingLineNumbers.slice(-1)[0]},e}();
+
+var getProperties=function(r){return new Properties(r).toObject()};
+
+function generateProps(inputObj, prefix) {
+    let envMap = new Map();
+
+    if (inputObj == undefined || inputObj == null) {
+        throw new InvalidContentError("invalid content");
+    }
+
+    if (prefix.length > 0) {
+        prefix = prefix + "_";
+    }
+
+    const m = new Map(Object.entries(inputObj));
+
+    for (const [k, v] of m) {
+        const name = prefix + k;
+
+        if (v instanceof Array) {
+            throw new UnsupportedContentError('key \'' + name + '\': arrays are not supported')
+        } else if (typeof v == "string") {
+            envMap.set(name,  v);
+        } else if (typeof v == "number") {
+            envMap.set(name,  "" + v);
+        } else if (typeof v == "object") {
+            envMap = new Map([...envMap, ...generateProps(v, name)]);
+        }
+    }
+
+    return envMap;
+}
+
+function GenerateProps(rawProps, prefix = '')  {
+    let rawPropsObject = Object;
+
+    try {
+        rawPropsObject = getProperties(rawProps);
+    } catch (err) {
+        throw new InvalidContentError('failed to parse properties: ' + err.message);
+    }
+
+    if (rawPropsObject == null || rawPropsObject == undefined || typeof rawPropsObject == 'string') {
+        throw new InvalidContentError(`failed to parse properties`);
+    }
+
+    return generateProps(rawPropsObject, prefix);
+}
+
 function GenerateFromFile(f, prefix, includeKeys) {
     let fileContent = '';
 
@@ -34811,7 +34867,8 @@ function GenerateFromFile(f, prefix, includeKeys) {
 function GenerateFromContent(c, prefix, includeKeys) {
     const generators = [
         GenerateJson,
-        GenerateYaml
+        GenerateYaml,
+        GenerateProps
     ];
 
     for (const generate of generators) {

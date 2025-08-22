@@ -1,6 +1,7 @@
 import fs from 'fs';
 import GenerateJson from './json.js';
 import GenerateYaml from './yaml.js';
+import GenerateProps from './properties.js';
 import { AppError, InvalidContentError } from './errors.js';
 
 export function GenerateFromFile(f, prefix, includeKeys) {
@@ -18,7 +19,8 @@ export function GenerateFromFile(f, prefix, includeKeys) {
 export function GenerateFromContent(c, prefix, includeKeys) {
     const generators = [
         GenerateJson,
-        GenerateYaml
+        GenerateYaml,
+        GenerateProps
     ];
 
     for (const generate of generators) {
