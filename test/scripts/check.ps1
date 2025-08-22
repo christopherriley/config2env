@@ -1,4 +1,7 @@
 function check {
+    Write-Output "check(): enter"
+    Get-ChildItem Env:
+
     $envvarname = $args[0]
     $expected = $args[1]
     $actual = Get-Variable -Name $envvarname -ValueOnly
