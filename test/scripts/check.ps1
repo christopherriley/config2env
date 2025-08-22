@@ -1,9 +1,7 @@
 function check {
-    Write-Output "check(): enter"
-
     $envvarname = $args[0]
     $expected = $args[1]
-    $actual = Get-Variable -Scope Global -Name $envvarname -ValueOnly
+    $actual = Get-Item Env:$envvarname | Select-Object -ExpandProperty Value
     Write-Output "TEST: `$$envvarname - expected: $expected, actual: $actual"
 
     if ($expected -ne $actual) {
