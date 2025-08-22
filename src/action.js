@@ -26,12 +26,10 @@ try {
     envMap.forEach((v, k) => {
         core.info(`${k}="${v}"`);
 
-        if (GITHUB_ENV.length > 0) {
-            try {
-                fs.appendFileSync(GITHUB_ENV, `${k}=${v}` + os.EOL, 'utf8');
-            } catch (err) {
-                throw new AppError(`failed to write to GITHUB_ENV: ${err}`);
-            }
+        try {
+            fs.appendFileSync(GITHUB_ENV, `${k}=${v}` + os.EOL, 'utf8');
+        } catch (err) {
+            throw new AppError(`failed to write to GITHUB_ENV: ${err}`);
         }
     });
 } catch (err) {

@@ -34853,12 +34853,10 @@ try {
     envMap.forEach((v, k) => {
         coreExports.info(`${k}="${v}"`);
 
-        if (GITHUB_ENV.length > 0) {
-            try {
-                require$$1.appendFileSync(GITHUB_ENV, `${k}=${v}` + require$$0.EOL, 'utf8');
-            } catch (err) {
-                throw new AppError(`failed to write to GITHUB_ENV: ${err}`);
-            }
+        try {
+            require$$1.appendFileSync(GITHUB_ENV, `${k}=${v}` + require$$0.EOL, 'utf8');
+        } catch (err) {
+            throw new AppError(`failed to write to GITHUB_ENV: ${err}`);
         }
     });
 } catch (err) {
