@@ -34796,7 +34796,7 @@ function GenerateYaml(rawYaml, prefix = '')  {
     return generateYaml(rawYamlObject, prefix);
 }
 
-function GenerateFromFile(f, prefix) {
+function GenerateFromFile(f, prefix, includeKeys) {
     let fileContent = '';
 
     try {
@@ -34805,10 +34805,10 @@ function GenerateFromFile(f, prefix) {
         throw new AppError(`failed to read config file '${f}': ${err}`);
     }
 
-    return GenerateFromContent(fileContent, prefix);
+    return GenerateFromContent(fileContent, prefix, includeKeys);
 }
 
-function GenerateFromContent(c, prefix) {
+function GenerateFromContent(c, prefix, includeKeys) {
     const generators = [
         GenerateJson,
         GenerateYaml
@@ -34816,7 +34816,24 @@ function GenerateFromContent(c, prefix) {
 
     for (const generate of generators) {
         try {
-            return generate(c, prefix);
+            let envMap = generate(c, prefix);
+            if (includeKeys != undefined && includeKeys.length > 0) {
+                let filteredEnvMap = new Map();
+                for (const key of includeKeys) {
+                    let k = key.trim();
+                    if (prefix.length > 0) {
+                        k = prefix + "_" + k;
+                    }
+
+                    const val = envMap.get(k);
+                    if (val != undefined) {
+                        filteredEnvMap.set(k, val);
+                    }
+                }
+                return filteredEnvMap;
+            }
+
+            return envMap;
         } catch (err) {
             if (err instanceof AppError) {
                 if (!(err instanceof InvalidContentError)) {
@@ -34849,7 +34866,9 @@ try {
         coreExports.info(`env var prefix: ${prefix}`);
     }
 
-    const envMap = GenerateFromFile(configFile, prefix);
+    const includeKeys = coreExports.getInput("include-keys").trim().split(",");
+
+    const envMap = GenerateFromFile(configFile, prefix, includeKeys);
     envMap.forEach((v, k) => {
         coreExports.info(`${k}="${v}"`);
 

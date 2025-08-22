@@ -12,13 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: run action with test json config
+      - name: basic json - run action with test config
         uses: christopherriley/config2env@main
         with:
           config-file: ./test/json/simple.json
           prefix: action_test_json
 
-      - name: verify the env vars are properly set
+      - name: basic json - verify the env vars are properly set
         run: |
           echo action_test_json_name: $action_test_json_name
           echo action_test_json_age: $action_test_json_age
@@ -39,13 +39,15 @@ jobs:
             exit 1
           fi
 
-      - name: run action with test yaml config
+
+
+      - name: basic yaml - run action with test config
         uses: christopherriley/config2env@main
         with:
           config-file: ./test/yaml/simple.yaml
           prefix: action_test_yaml
 
-      - name: verify the env vars are properly set
+      - name: basic yaml - verify the env vars are properly set
         run: |
           echo action_test_yaml_version_windows: $action_test_yaml_version_windows
           echo action_test_yaml_version_linux: $action_test_yaml_version_linux
@@ -63,5 +65,35 @@ jobs:
 
           if [ ! "$action_test_yaml_version_macos" == "the version is 1.23" ]; then
             echo "test failed: env var 'action_test_yaml_version_macos' - expected 'the version is 1.23' got '$action_test_yaml_version_macos'"
+            exit 1
+          fi
+
+
+
+      - name: key select - run action with test yaml config
+        uses: christopherriley/config2env@main
+        with:
+          config-file: ./test/yaml/simple.yaml
+          prefix: action_test_yaml_select
+          include-keys: version_windows, version_macos
+
+      - name: key select - verify the env vars are properly set
+        run: |
+          echo action_test_yaml_select_version_windows: $action_test_yaml_select_version_windows
+          echo action_test_yaml_select_version_linux: $action_test_yaml_select_version_linux
+          echo action_test_yaml_select_version_macos: $action_test_yaml_select_version_macos
+
+          if [ ! "$action_test_yaml_select_version_windows" == "the version is 1.21" ]; then
+            echo "test failed: env var 'action_test_yaml_select_version_windows' - expected 'the version is 1.21' got '$action_test_yaml_select_version_windows'"
+            exit 1
+          fi
+
+          if [ ! "$action_test_yaml_select_version_linux" == "the version is 1.22" ]; then
+            echo "test failed: env var 'action_test_yaml_select_version_linux' - expected 'the version is 1.22' got '$action_test_yaml_select_version_linux'"
+            exit 1
+          fi
+
+          if [ ! "$action_test_yaml_select_version_macos" == "" ]; then
+            echo "test failed: env var 'action_test_yaml_select_version_macos' - expected '' got '$action_test_yaml_select_version_macos'"
             exit 1
           fi
