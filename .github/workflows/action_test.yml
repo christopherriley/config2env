@@ -38,3 +38,37 @@ jobs:
             echo "test failed: env var 'action_test_gpa' - expected '3.84' got '$action_test_gpa'"
             exit 1
           fi
+
+  linux-test:
+    name: simple yaml - linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: run action with test config
+        uses: christopherriley/config2env@main
+        with:
+          config-file: ./test/yaml/simple.yaml
+          prefix: action_test
+
+      - name: verify the env vars are properly set
+        run: |
+          echo action_test_version_windows: $action_test_version_windows
+          echo action_test_version_linux: $action_test_version_linux
+          echo action_test_version_macos: $action_test_version_macos
+
+          if [ ! "$action_test_version_windows" == "the version is 1.21" ]; then
+            echo "test failed: env var 'action_test_version_windows' - expected 'the version is 1.21' got '$action_test_version_windows'"
+            exit 1
+          fi
+
+          if [ ! "$action_test_version_linux" == "the version is 1.22" ]; then
+            echo "test failed: env var 'action_test_version_linux' - expected 'the version is 1.22' got '$action_test_version_linux'"
+            exit 1
+          fi
+
+          if [ ! "$action_test_version_macos" == "the version is 1.23" ]; then
+            echo "test failed: env var 'action_test_version_macos' - expected 'the version is 1.23' got '$action_test_version_macos'"
+            exit 1
+          fi

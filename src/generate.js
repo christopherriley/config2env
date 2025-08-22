@@ -1,5 +1,6 @@
 import fs from 'fs';
 import GenerateJson from './json.js';
+import GenerateYaml from './yaml.js';
 import { AppError, InvalidContentError } from './errors.js';
 
 export function GenerateFromFile(f, prefix) {
@@ -18,10 +19,26 @@ function GenerateFromContent(c, prefix) {
     try {
         return GenerateJson(c, prefix);
     } catch (err) {
-        if (!(err instanceof InvalidContentError)) {
-            throw new AppError(`failed to process JSON content: ${err}`);
+        if (err instanceof AppError) {
+            if (!(err instanceof InvalidContentError)) {
+                throw new AppError(`failed to process JSON content: ${err}`);
+            }
+        } else {
+            throw err;
         }
     }
 
-    throw new AppError('content could not be processed with any known method');
+    try {
+        return GenerateYaml(c, prefix);
+    } catch (err) {
+        if (err instanceof AppError) {
+            if (!(err instanceof InvalidContentError)) {
+                throw new AppError(`failed to process Yaml content: ${err}`);
+            }
+        } else {
+            throw err;
+        }
+    }
+
+    throw new AppError('content could not be processed with any method');
 }

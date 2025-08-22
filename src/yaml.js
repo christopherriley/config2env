@@ -1,15 +1,16 @@
+import YAML from 'yaml'
 import { InvalidContentError, UnsupportedContentError } from './errors.js';
 
-function generateJson(inputObj, prefix) {
+function generateYaml(inputObj, prefix) {
     let envMap = new Map();
 
     if (inputObj == undefined || inputObj == null) {
         throw new InvalidContentError("invalid content");
     }
 
-	if (prefix.length > 0) {
-		prefix = prefix + "_";
-	}
+    if (prefix.length > 0) {
+        prefix = prefix + "_";
+    }
 
     const m = new Map(Object.entries(inputObj));
 
@@ -23,21 +24,25 @@ function generateJson(inputObj, prefix) {
         } else if (typeof v == "number") {
             envMap.set(name,  "" + v);
         } else if (typeof v == "object") {
-            envMap = new Map([...envMap, ...generateJson(v, name)]);
+            envMap = new Map([...envMap, ...generateYaml(v, name)]);
         }
     }
 
     return envMap;
 }
 
-export default function GenerateJson(rawJson, prefix = '')  {
-    let rawJsonObject = Object;
+export default function GenerateYaml(rawYaml, prefix = '')  {
+    let rawYamlObject = Object;
 
     try {
-        rawJsonObject = JSON.parse(rawJson);
-    } catch(error) {
-        throw new InvalidContentError('failed to parse JSON: ' + error.message);
+        rawYamlObject = YAML.parse(rawYaml);
+    } catch (err) {
+        throw new InvalidContentError('failed to parse JSON: ' + err.message);
     }
 
-    return generateJson(rawJsonObject, prefix);
+    if (rawYamlObject == null || rawYamlObject == undefined || typeof rawYamlObject == 'string') {
+        throw new InvalidContentError(`failed to parse Yaml`);
+    }
+
+    return generateYaml(rawYamlObject, prefix);
 }
