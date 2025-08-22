@@ -8,6 +8,9 @@ inputs:
   prefix:
     description: Prefix to attach to generated env vars
     required: false
+  include-keys:
+    description: Comma-separated list of env vars to include
+    required: false
 
 runs:
   using: node20

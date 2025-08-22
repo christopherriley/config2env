@@ -22,7 +22,10 @@ try {
         core.info(`env var prefix: ${prefix}`);
     }
 
-    const includeKeys = core.getInput("include-keys").trim().split(",");
+    let includeKeys = core.getInput("include-keys").trim().split(",");
+    if (includeKeys.length == 1 && includeKeys[0].length == 0) {
+        includeKeys = [];
+    }
     core.info(`includeKeys: ${includeKeys}, length: ${includeKeys.length}`);
 
     const envMap = GenerateFromFile(configFile, prefix, includeKeys);
