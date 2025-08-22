@@ -88,12 +88,12 @@ jobs:
             exit 1
           fi
 
-          if [ ! "$action_test_yaml_select_version_linux" == "the version is 1.22" ]; then
-            echo "test failed: env var 'action_test_yaml_select_version_linux' - expected 'the version is 1.22' got '$action_test_yaml_select_version_linux'"
+          if [ ! "$action_test_yaml_select_version_linux" == "" ]; then
+            echo "test failed: env var 'action_test_yaml_select_version_linux' - expected '' got '$action_test_yaml_select_version_linux'"
             exit 1
           fi
 
-          if [ ! "$action_test_yaml_select_version_macos" == "" ]; then
-            echo "test failed: env var 'action_test_yaml_select_version_macos' - expected '' got '$action_test_yaml_select_version_macos'"
+          if [ ! "$action_test_yaml_select_version_macos" == "the version is 1.23" ]; then
+            echo "test failed: env var 'action_test_yaml_select_version_macos' - expected 'the version is 1.22' got '$action_test_yaml_select_version_macos'"
             exit 1
           fi
