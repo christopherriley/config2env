@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: run action with test config
+      - name: run action with test json config
         uses: christopherriley/config2env@main
         with:
           config-file: ./test/json/simple.json
@@ -39,14 +39,7 @@ jobs:
             exit 1
           fi
 
-  linux-test:
-    name: simple yaml - linux
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: run action with test config
+      - name: run action with test yaml config
         uses: christopherriley/config2env@main
         with:
           config-file: ./test/yaml/simple.yaml
