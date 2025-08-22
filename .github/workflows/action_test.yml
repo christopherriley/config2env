@@ -20,24 +20,11 @@ jobs:
 
       - name: basic json - verify the env vars are properly set
         run: |
-          echo action_test_json_name: $action_test_json_name
-          echo action_test_json_age: $action_test_json_age
-          echo action_test_json_gpa: $action_test_json_gpa
+          source ./test/scripts/check_linux.sh
 
-          if [ ! "$action_test_json_name" == "bob smith" ]; then
-            echo "test failed: env var 'action_test_json_name' - expected 'bob smith' got '$action_test_json_name'"
-            exit 1
-          fi
-
-          if [ ! "$action_test_json_age" == "27" ]; then
-            echo "test failed: env var 'action_test_json_age' - expected '27' got '$action_test_json_age'"
-            exit 1
-          fi
-
-          if [ ! "$action_test_json_gpa" == "3.84" ]; then
-            echo "test failed: env var 'action_test_json_gpa' - expected '3.84' got '$action_test_json_gpa'"
-            exit 1
-          fi
+          check action_test_json_name "bob smith"
+          check action_test_json_age 27
+          check action_test_json_gpa 3.84
 
 
 
@@ -49,24 +36,11 @@ jobs:
 
       - name: basic yaml - verify the env vars are properly set
         run: |
-          echo action_test_yaml_version_windows: $action_test_yaml_version_windows
-          echo action_test_yaml_version_linux: $action_test_yaml_version_linux
-          echo action_test_yaml_version_macos: $action_test_yaml_version_macos
+          source ./test/scripts/check_linux.sh
 
-          if [ ! "$action_test_yaml_version_windows" == "the version is 1.21" ]; then
-            echo "test failed: env var 'action_test_yaml_version_windows' - expected 'the version is 1.21' got '$action_test_yaml_version_windows'"
-            exit 1
-          fi
-
-          if [ ! "$action_test_yaml_version_linux" == "the version is 1.22" ]; then
-            echo "test failed: env var 'action_test_yaml_version_linux' - expected 'the version is 1.22' got '$action_test_yaml_version_linux'"
-            exit 1
-          fi
-
-          if [ ! "$action_test_yaml_version_macos" == "the version is 1.23" ]; then
-            echo "test failed: env var 'action_test_yaml_version_macos' - expected 'the version is 1.23' got '$action_test_yaml_version_macos'"
-            exit 1
-          fi
+          check action_test_yaml_version_windows "the version is 1.21"
+          check action_test_yaml_version_linux "the version is 1.22"
+          check action_test_yaml_version_macos "the version is 1.23"
 
 
 
@@ -79,21 +53,8 @@ jobs:
 
       - name: key select - verify the env vars are properly set
         run: |
-          echo action_test_yaml_select_version_windows: $action_test_yaml_select_version_windows
-          echo action_test_yaml_select_version_linux: $action_test_yaml_select_version_linux
-          echo action_test_yaml_select_version_macos: $action_test_yaml_select_version_macos
+          source ./test/scripts/check_linux.sh
 
-          if [ ! "$action_test_yaml_select_version_windows" == "the version is 1.21" ]; then
-            echo "test failed: env var 'action_test_yaml_select_version_windows' - expected 'the version is 1.21' got '$action_test_yaml_select_version_windows'"
-            exit 1
-          fi
-
-          if [ ! "$action_test_yaml_select_version_linux" == "" ]; then
-            echo "test failed: env var 'action_test_yaml_select_version_linux' - expected '' got '$action_test_yaml_select_version_linux'"
-            exit 1
-          fi
-
-          if [ ! "$action_test_yaml_select_version_macos" == "the version is 1.23" ]; then
-            echo "test failed: env var 'action_test_yaml_select_version_macos' - expected 'the version is 1.22' got '$action_test_yaml_select_version_macos'"
-            exit 1
-          fi
+          check action_test_yaml_select_version_windows "the version is 1.21"
+          check action_test_yaml_select_version_linux ""
+          check action_test_yaml_select_version_macos "the version is 1.23"
