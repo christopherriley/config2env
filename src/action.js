@@ -23,6 +23,7 @@ try {
     }
 
     const includeKeys = core.getInput("include-keys").trim().split(",");
+    core.info(`includeKeys: ${includeKeys}, length: ${includeKeys.length}`);
 
     const envMap = GenerateFromFile(configFile, prefix, includeKeys);
     envMap.forEach((v, k) => {
