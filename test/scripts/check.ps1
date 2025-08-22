@@ -1,7 +1,7 @@
 function check {
     $envvarname = $args[0]
     $expected = $args[1]
-    $actual = Get-Item Env:$envvarname | Select-Object -ExpandProperty Value -ErrorAction SilentlyContinue
+    $actual = Get-Item Env:$envvarname -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Value
     Write-Output "TEST: `$$envvarname - expected: $expected, actual: $actual"
 
     if ($expected -ne $actual) {
