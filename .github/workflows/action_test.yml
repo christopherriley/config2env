@@ -140,7 +140,6 @@ jobs:
           . .\test\scripts\check.ps1
 
           echo "action_test_json_name - $action_test_json_name"
-          Get-ChildItem Env:
 
           check action_test_json_name "bob smith"
           check action_test_json_age 27
