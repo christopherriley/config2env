@@ -6,7 +6,7 @@ on:
 
 jobs:
   linux-test:
-    name: simple json - linux
+    name: linux tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
