@@ -56,7 +56,7 @@ $config_version_macos = 1.23
 | -------: | :------: | :------- |
 | `config-file`  | Yes  | location of a config file to process from the current repo |
 | `format`  | no  | can be one of `json`, `yaml`, `props` to force the config file type, instead of detecting |
-| `prefix`  | no  | prefix to append to the environment variables |
+| `prefix`  | no  | prefix to add to the environment variables |
 | `include-keys`  | no  | comma-separated list of specific keys (paths) to include (do not include any prefix here) |
 
 
