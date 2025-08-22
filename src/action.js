@@ -7,10 +7,9 @@ import { AppError } from './errors.js';
 try {
     const GITHUB_ENV = process.env.GITHUB_ENV.trim();
     if (GITHUB_ENV.length == 0) {
-        core.warning(`WARNING: GITHUB_ENV is not set - this will be a dry run only`);
-    } else {
-        core.info(`GITHUB_ENV: ${GITHUB_ENV}`);
+        throw new AppError(`GITHUB_ENV env var is not set`);
     }
+    core.info(`GITHUB_ENV: ${GITHUB_ENV}`);
 
     const configFile = core.getInput("config-file").trim();
     if (configFile.length == 0) {
