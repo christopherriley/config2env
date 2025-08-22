@@ -10,11 +10,11 @@ Let's say the source repo has a config file:
 
 ```json
 {
-  "version": {
-    "windows": 1.21,
-    "linux": 1.22,
-    "macos": 1.23
-  }
+    "version": {
+        "windows": 1.21,
+        "linux": 1.22,
+        "macos": 1.23
+    }
 }
 ```
 
@@ -34,15 +34,28 @@ jobs:
         with:
           config-file: ./build_config.json
           prefix: config
+
+      - name: do some stuff
+      - run |
+          echo windows version: $config_version_windows
+          echo linux version: $config_version_linux
+          # etc...
 ```
 
-the following environment variables will be emitted, which can be consumed by subsequent action steps:
+the file `./build_config.json` from the repo will be read, and environment variables which can be consumed by subsequent action steps will be created:
 
 ```bash
 $config_version_windows = 1.21
 $config_version_linux = 1.22
 $config_version_macos = 1.23
 ```
+
+### action inputs
+
+`config-file` - `required` - location of a config file to process from the current repo
+`format` - optional - can be one of `json`, `yaml`, `props` to force the config file type, instead of detecting
+`prefix` - optional - prefix to append to the environment variables
+`include-keys` - optional - a comma-separated list of specific keys (paths) to include (do not include any prefix here)
 
 ### usecases
 
