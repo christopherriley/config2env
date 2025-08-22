@@ -34809,27 +34809,22 @@ function GenerateFromFile(f, prefix) {
 }
 
 function GenerateFromContent(c, prefix) {
-    try {
-        return GenerateJson(c, prefix);
-    } catch (err) {
-        if (err instanceof AppError) {
-            if (!(err instanceof InvalidContentError)) {
-                throw new AppError(`failed to process JSON content: ${err}`);
-            }
-        } else {
-            throw err;
-        }
-    }
+    const generators = [
+        GenerateJson,
+        GenerateYaml
+    ];
 
-    try {
-        return GenerateYaml(c, prefix);
-    } catch (err) {
-        if (err instanceof AppError) {
-            if (!(err instanceof InvalidContentError)) {
-                throw new AppError(`failed to process Yaml content: ${err}`);
+    for (const generate of generators) {
+        try {
+            return generate(c, prefix);
+        } catch (err) {
+            if (err instanceof AppError) {
+                if (!(err instanceof InvalidContentError)) {
+                    throw new AppError(`failed to process content: ${err}`);
+                }
+            } else {
+                throw err;
             }
-        } else {
-            throw err;
         }
     }
 
