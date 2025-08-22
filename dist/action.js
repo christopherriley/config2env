@@ -34870,7 +34870,7 @@ try {
     if (includeKeys.length == 1 && includeKeys[0].length == 0) {
         includeKeys = [];
     }
-    coreExports.info(`include keys: ${includeKeys}, length: ${includeKeys.length}`);
+    coreExports.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
 
     const envMap = GenerateFromFile(configFile, prefix, includeKeys);
     envMap.forEach((v, k) => {

@@ -26,7 +26,7 @@ try {
     if (includeKeys.length == 1 && includeKeys[0].length == 0) {
         includeKeys = [];
     }
-    core.info(`include keys: ${includeKeys}, length: ${includeKeys.length}`);
+    core.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
 
     const envMap = GenerateFromFile(configFile, prefix, includeKeys);
     envMap.forEach((v, k) => {
