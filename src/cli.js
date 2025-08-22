@@ -18,6 +18,10 @@ if (import.meta.url.startsWith('file:')) {
                     prefix: {
                         type: 'string',
                         short: 'p',
+                    },
+                    format: {
+                        type: 'string',
+                        short: 'f',
                     }
                 },
                 allowPositionals: true,
@@ -29,11 +33,16 @@ if (import.meta.url.startsWith('file:')) {
             }
 
             let prefix = values.prefix;
-            if (prefix == undefined || configFile.trim().length == 0) {
+            if (prefix == undefined || prefix.trim().length == 0) {
                 prefix = ""
             }
 
-            const envMap = GenerateFromFile(configFile, prefix, values.key);
+            let format = values.format;
+            if (format == undefined || format.trim().length == 0) {
+                format = ""
+            }
+
+            const envMap = GenerateFromFile(configFile, prefix, values.key, format);
             envMap.forEach((v, k) => {
                 console.log(`${k}=${v}`)
             });

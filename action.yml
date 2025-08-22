@@ -5,6 +5,9 @@ inputs:
   config-file:
     description: Config file to convert to environment variables
     required: true
+  format:
+    description: Explicitly specify the format of the config (json, yaml, props)
+    required: false
   prefix:
     description: Prefix to attach to generated env vars
     required: false

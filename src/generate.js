@@ -4,7 +4,7 @@ import GenerateYaml from './yaml.js';
 import GenerateProps from './properties.js';
 import { AppError, InvalidContentError } from './errors.js';
 
-export function GenerateFromFile(f, prefix, includeKeys) {
+export function GenerateFromFile(f, prefix, includeKeys, format) {
     let fileContent = '';
 
     try {
@@ -13,15 +13,37 @@ export function GenerateFromFile(f, prefix, includeKeys) {
         throw new AppError(`failed to read config file '${f}': ${err}`);
     }
 
-    return GenerateFromContent(fileContent, prefix, includeKeys);
+    return GenerateFromContent(fileContent, prefix, includeKeys, format);
 }
 
-export function GenerateFromContent(c, prefix, includeKeys) {
-    const generators = [
-        GenerateJson,
-        GenerateYaml,
-        GenerateProps
-    ];
+export function GenerateFromContent(c, prefix, includeKeys, format='') {
+    let generators = [];
+
+    if (format == undefined || format.trim() == '') {
+        generators = [
+            GenerateJson,
+            GenerateYaml,
+            GenerateProps
+        ];
+    } else {
+        format = format.toUpperCase().trim();
+
+        if (format == 'JSON') {
+            generators = [
+                GenerateJson
+            ];
+        } else if (format == 'YAML' || format == 'YML') {
+            generators = [
+                GenerateYaml
+            ];
+        } else if (format == 'PROP' || format == 'PROPS' || format == 'PROPERTIES') {
+            generators = [
+                GenerateProps
+            ];
+        } else {
+            throw new AppError(`invalid config file format: ${format}`);
+        }
+    }
 
     for (const generate of generators) {
         try {

@@ -34852,7 +34852,7 @@ function GenerateProps(rawProps, prefix = '')  {
     return generateProps(rawPropsObject, prefix);
 }
 
-function GenerateFromFile(f, prefix, includeKeys) {
+function GenerateFromFile(f, prefix, includeKeys, format) {
     let fileContent = '';
 
     try {
@@ -34861,15 +34861,37 @@ function GenerateFromFile(f, prefix, includeKeys) {
         throw new AppError(`failed to read config file '${f}': ${err}`);
     }
 
-    return GenerateFromContent(fileContent, prefix, includeKeys);
+    return GenerateFromContent(fileContent, prefix, includeKeys, format);
 }
 
-function GenerateFromContent(c, prefix, includeKeys) {
-    const generators = [
-        GenerateJson,
-        GenerateYaml,
-        GenerateProps
-    ];
+function GenerateFromContent(c, prefix, includeKeys, format='') {
+    let generators = [];
+
+    if (format == undefined || format.trim() == '') {
+        generators = [
+            GenerateJson,
+            GenerateYaml,
+            GenerateProps
+        ];
+    } else {
+        format = format.toUpperCase().trim();
+
+        if (format == 'JSON') {
+            generators = [
+                GenerateJson
+            ];
+        } else if (format == 'YAML' || format == 'YML') {
+            generators = [
+                GenerateYaml
+            ];
+        } else if (format == 'PROP' || format == 'PROPS' || format == 'PROPERTIES') {
+            generators = [
+                GenerateProps
+            ];
+        } else {
+            throw new AppError(`invalid config file format: ${format}`);
+        }
+    }
 
     for (const generate of generators) {
         try {
@@ -34923,13 +34945,18 @@ try {
         coreExports.info(`env var prefix: ${prefix}`);
     }
 
+    const format = coreExports.getInput("format").trim();
+    if (format.length > 0) {
+        coreExports.info(`config file format: ${format}`);
+    }
+
     let includeKeys = coreExports.getInput("include-keys").trim().split(",");
     if (includeKeys.length == 1 && includeKeys[0].length == 0) {
         includeKeys = [];
     }
     coreExports.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
 
-    const envMap = GenerateFromFile(configFile, prefix, includeKeys);
+    const envMap = GenerateFromFile(configFile, prefix, includeKeys, format);
     envMap.forEach((v, k) => {
         coreExports.info(`${k}="${v}"`);
 

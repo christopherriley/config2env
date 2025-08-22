@@ -22,13 +22,18 @@ try {
         core.info(`env var prefix: ${prefix}`);
     }
 
+    const format = core.getInput("format").trim();
+    if (format.length > 0) {
+        core.info(`config file format: ${format}`);
+    }
+
     let includeKeys = core.getInput("include-keys").trim().split(",");
     if (includeKeys.length == 1 && includeKeys[0].length == 0) {
         includeKeys = [];
     }
     core.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
 
-    const envMap = GenerateFromFile(configFile, prefix, includeKeys);
+    const envMap = GenerateFromFile(configFile, prefix, includeKeys, format);
     envMap.forEach((v, k) => {
         core.info(`${k}="${v}"`);
 
