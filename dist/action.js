@@ -34786,7 +34786,7 @@ function GenerateYaml(rawYaml, prefix = '')  {
     try {
         rawYamlObject = YAML.parse(rawYaml);
     } catch (err) {
-        throw new InvalidContentError('failed to parse JSON: ' + err.message);
+        throw new InvalidContentError('failed to parse Yaml: ' + err.message);
     }
 
     if (rawYamlObject == null || rawYamlObject == undefined || typeof rawYamlObject == 'string') {
