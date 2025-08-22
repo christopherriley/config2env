@@ -58,3 +58,59 @@ jobs:
           check action_test_yaml_select_version_windows "the version is 1.21"
           check action_test_yaml_select_version_linux ""
           check action_test_yaml_select_version_macos "the version is 1.23"
+
+
+
+  macos-test:
+    name: macos tests
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: basic json - run action with test config
+        uses: christopherriley/config2env@main
+        with:
+          config-file: ./test/json/simple.json
+          prefix: action_test_json
+
+      - name: basic json - verify the env vars are properly set
+        run: |
+          source ./test/scripts/check_linux.sh
+
+          check action_test_json_name "bob smith"
+          check action_test_json_age 27
+          check action_test_json_gpa 3.84
+
+
+
+      - name: basic yaml - run action with test config
+        uses: christopherriley/config2env@main
+        with:
+          config-file: ./test/yaml/simple.yaml
+          prefix: action_test_yaml
+
+      - name: basic yaml - verify the env vars are properly set
+        run: |
+          source ./test/scripts/check_linux.sh
+
+          check action_test_yaml_version_windows "the version is 1.21"
+          check action_test_yaml_version_linux "the version is 1.22"
+          check action_test_yaml_version_macos "the version is 1.23"
+
+
+
+      - name: key select - run action with test yaml config
+        uses: christopherriley/config2env@main
+        with:
+          config-file: ./test/yaml/simple.yaml
+          prefix: action_test_yaml_select
+          include-keys: version_windows, version_macos
+
+      - name: key select - verify the env vars are properly set
+        run: |
+          source ./test/scripts/check_linux.sh
+
+          check action_test_yaml_select_version_windows "the version is 1.21"
+          check action_test_yaml_select_version_linux ""
+          check action_test_yaml_select_version_macos "the version is 1.23"
