@@ -1,7 +1,7 @@
 function check {
     $envvarname = $args[0]
     $expected = $args[1]
-    $actual = Get-Variable -Name $envvarname -ValueOnly -ErrorAction SilentlyContinue
+    $actual = Get-Variable -Name $envvarname -ValueOnly
     Write-Output "TEST: `$$envvarname - expected: $expected, actual: $actual"
 
     if ($expected -ne $actual) {
