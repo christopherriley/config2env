@@ -54,7 +54,7 @@ $config_version_macos = 1.23
 
 | name | required | description |
 | -------: | :------: | :------- |
-| `config-file`  | `Yes`  | location of a config file to process from the current repo |
+| `config-file`  | Yes  | location of a config file to process from the current repo |
 | `format`  | no  | can be one of `json`, `yaml`, `props` to force the config file type, instead of detecting |
 | `prefix`  | no  | prefix to append to the environment variables |
 | `include-keys`  | no  | comma-separated list of specific keys (paths) to include (do not include any prefix here) |
@@ -66,4 +66,4 @@ this action can be helpful when it's necessary to keep a local build and a CI bu
 
 ### runner platform support
 
-This is a JavaScript action - windows, linux and macos supported and tested.
+This is a JavaScript action, node20 is required. Windows, linux and macos supported and tested. This action should work on all github hosted runners.
