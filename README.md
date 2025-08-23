@@ -2,7 +2,7 @@
 
 ## config2env - github action to build environment variables from config files
 
-`Config2env` is a GitHub action that takes a config file (json, yaml, properties) and emits environment variables that can be used by the current action.
+`Config2env` is a GitHub action that takes a config file (json, yaml, properties) and emits environment variables that can be consumed by subsequent steps of the current run.
 
 ### example - json
 
