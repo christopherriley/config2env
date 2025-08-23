@@ -31,12 +31,13 @@ try {
     if (includeKeys.length == 1 && includeKeys[0].length == 0) {
         includeKeys = [];
     }
-    core.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
+
+    if (includeKeys.length > 0) {
+        core.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
+    }
 
     const envMap = GenerateFromFile(configFile, prefix, includeKeys, format);
     envMap.forEach((v, k) => {
-        core.info(`${k}="${v}"`);
-
         try {
             fs.appendFileSync(GITHUB_ENV, `${k}=${v}` + os.EOL, 'utf8');
         } catch (err) {

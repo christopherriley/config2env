@@ -34954,12 +34954,13 @@ try {
     if (includeKeys.length == 1 && includeKeys[0].length == 0) {
         includeKeys = [];
     }
-    coreExports.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
+
+    if (includeKeys.length > 0) {
+        coreExports.info(`include keys: ${includeKeys} (length: ${includeKeys.length})`);
+    }
 
     const envMap = GenerateFromFile(configFile, prefix, includeKeys, format);
     envMap.forEach((v, k) => {
-        coreExports.info(`${k}="${v}"`);
-
         try {
             require$$1.appendFileSync(GITHUB_ENV, `${k}=${v}` + require$$0.EOL, 'utf8');
         } catch (err) {
