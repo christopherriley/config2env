@@ -3,14 +3,15 @@
 check() {
     env_var_name=$1
     val_expected=$2
+    val_actual=${!env_var_name}
 
-    echo "TEST: \$$env_var_name - expected: $val_expected, actual: ${!env_var_name}"
+    echo "TEST: \$$env_var_name - expected: $val_expected, actual: $val_actual"
 
-    if [ ! "${!env_var_name}" == "$val_expected" ]; then
+    if [ ! "$val_actual" == "$val_expected" ]; then
         echo "test failed: \$$env_var_name"
         echo
         echo "   expected: $val_expected"
-        echo "     actual: ${!env_var_name}"
+        echo "     actual: $val_actual"
         exit 1
     fi
 }
