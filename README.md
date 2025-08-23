@@ -62,7 +62,17 @@ $config_version_macos = 1.23
 
 ### usecases
 
-this action can be helpful when it's necessary to keep a local build and a CI build in sync from a single config file, for example.
+#### share config between local build and CI
+
+sometimes it's necessary to keep a local build and a CI build in sync from a single config file, for example. this action enables build settings to be shared between local build scripts and GHA workflows. 
+
+#### as workflow_dispatch input parameters
+
+[inputs to workflow_dispatch](https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/) are a great way to parameterize workflow runs. manual runs become complex and error prone, however, when the operator is required to manually enter many inputs at once. workflow inputs are also not tracked in source control, so there is no history and no peer-review possible.
+
+this action can be used instead of workflow_dispatch input parameters, to store workflow input parameters. changes to the config file that holds the values can go through the normal PR process, making workflow runs easier and less error prone.
+
+
 
 ### runner platform support
 
