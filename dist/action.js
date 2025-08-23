@@ -34963,8 +34963,9 @@ try {
     envMap.forEach((v, k) => {
         try {
             require$$1.appendFileSync(GITHUB_ENV, `${k}=${v}` + require$$0.EOL, 'utf8');
+            coreExports.info(`created env var: ${k}"`);
         } catch (err) {
-            throw new AppError(`failed to write to GITHUB_ENV: ${err}`);
+            throw new AppError(`failed to write env var ${k} to GITHUB_ENV: ${err}`);
         }
     });
 } catch (err) {
